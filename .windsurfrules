@@ -1,0 +1,20 @@
+# Project Setup Guide
+
+## Technologies Used
+- Astro framework with React integration
+- React v19
+- TailwindCSS v4
+
+## Development Environment
+- Package manager: Bun
+- Run commands with Bun
+- For binary commands use: `bunx --bun [command]`
+
+## Getting Started
+```sh
+# Install dependencies
+bun install
+
+# Start development server
+bun run dev
+```
