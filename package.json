@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "chadcn",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -9,6 +9,16 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.6.1"
+    "@astrojs/mdx": "^4.2.3",
+    "@astrojs/react": "^4.2.3",
+    "@tailwindcss/vite": "^4.0.17",
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/react": "^19.1.1",
+    "@types/react-dom": "^19.1.2",
+    "astro": "^5.6.1",
+    "canvas-confetti": "^1.9.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwindcss": "^4.0.17"
   }
 }
