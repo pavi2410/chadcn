@@ -4,11 +4,13 @@
 - Astro framework with React integration
 - React v19
 - TailwindCSS v4
+- Shadcn UI
 
 ## Development Environment
 - Package manager: Bun
 - Run commands with Bun
 - For binary commands use: `bunx --bun [command]`
+- Add shadcn components using: `bunx --bun shadcn@latest add [component]`
 
 ## Getting Started
 ```sh
