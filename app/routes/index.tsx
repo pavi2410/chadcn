@@ -34,8 +34,12 @@ function Home() {
           </nav>
           
           <div className="flex items-center gap-4">
-            <Button variant="outline" className="hidden md:inline-flex">Log in</Button>
-            <Button>Get Started</Button>
+            <Button variant="outline" className="hidden md:inline-flex" asChild>
+              <a href="/auth">Log in</a>
+            </Button>
+            <Button asChild>
+              <a href="/auth">Get Started</a>
+            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild className="md:hidden">
                 <Button variant="outline" size="icon">
@@ -60,7 +64,7 @@ function Home() {
                   <a href="#pricing">Pricing</a>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <a href="#">Log in</a>
+                  <a href="/auth">Log in</a>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
