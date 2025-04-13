@@ -2,8 +2,8 @@ import { defineCollection, z } from 'astro:content';
 import { file } from 'astro/loaders';
 
 // Define the schema for registry entry validation
-const registriesCollection = defineCollection({
-  loader: file('./src/content/registries/index.json'),
+const registries = defineCollection({
+  loader: file('./src/data/registries.json'),
   schema: z.object({
     url: z.string().url(),
     featured: z.boolean().optional().default(false),
@@ -12,5 +12,5 @@ const registriesCollection = defineCollection({
 });
 
 export const collections = {
-  'registries': registriesCollection
+  registries,
 };
