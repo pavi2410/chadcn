@@ -26,7 +26,7 @@ export const Route = createRootRoute({
     links: [
       {
         rel: "icon",
-        href: "/chadcn.png"
+        href: "/favicon.png"
       },
       {
         rel: "stylesheet",
