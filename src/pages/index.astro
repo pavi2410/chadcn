@@ -13,12 +13,22 @@ const registriesData = await Promise.all(
     const rawData = await fetchRegistryData(entry.data.url);
     if (!rawData) return null;
     
+    const processedData = processRegistryData(rawData);
+    
     return {
       id: entry.id,
       url: entry.data.url,
       featured: entry.data.featured,
       addedAt: entry.data.addedAt,
-      ...processRegistryData(rawData)
+      name: processedData.name || 'Unknown',
+      description: processedData.description || '',
+      homepage: processedData.homepage,
+      items: processedData.items,
+      // Extract additional properties from the registry data
+      type: rawData.type,
+      author: rawData.author,
+      dependencies: rawData.dependencies,
+      categories: rawData.categories
     };
   })
 );
@@ -51,7 +61,18 @@ const featuredRegistries = validRegistries.filter(registry => registry.featured)
             {featuredRegistries.map(registry => (
               <RegistryCard 
                 client:load
-                registry={registry} 
+                registry={{
+                  id: registry.id,
+                  name: registry.name,
+                  description: registry.description,
+                  items: registry.items || [],
+                  homepage: registry.homepage,
+                  featured: registry.featured,
+                  type: registry.type,
+                  author: registry.author,
+                  dependencies: registry.dependencies,
+                  categories: registry.categories
+                }} 
                 href={`/registry/${registry.id}`}
               />
             ))}

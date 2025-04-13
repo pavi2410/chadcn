@@ -8,10 +8,14 @@ interface RegistryCardProps {
   registry: {
     id: string;
     name: string;
-    description: string;
-    items: any[];
+    description?: string;
+    items?: any[];
     homepage?: string;
     featured?: boolean;
+    type?: string;
+    author?: string;
+    dependencies?: string[];
+    categories?: string[];
   };
   href: string;
 }
@@ -30,8 +34,18 @@ export default function RegistryCard({ registry, href }: RegistryCardProps) {
       </CardHeader>
       <CardContent className="flex-grow">
         <p className="text-sm text-muted-foreground">
-          {registry.items.length} component{registry.items.length !== 1 ? 's' : ''}
+          {registry.items?.length || 0} component{(registry.items?.length || 0) !== 1 ? 's' : ''}
         </p>
+        {registry.author && (
+          <p className="text-xs text-muted-foreground mt-2">
+            By: {registry.author}
+          </p>
+        )}
+        {registry.type && (
+          <p className="text-xs text-muted-foreground mt-1">
+            Type: {registry.type.replace('registry:', '')}
+          </p>
+        )}
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button asChild variant="default">

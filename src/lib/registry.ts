@@ -29,14 +29,65 @@ export async function fetchRegistryData(url: string) {
 }
 
 /**
+ * Registry item type definition based on the shadcn registry schema
+ */
+export interface RegistryItem {
+  $schema?: string;
+  name: string;
+  title?: string;
+  description?: string;
+  type?: string;
+  author?: string;
+  dependencies?: string[];
+  registryDependencies?: string[];
+  files?: {
+    path: string;
+    type: string;
+    target?: string;
+  }[];
+  cssVars?: {
+    theme?: Record<string, string>;
+    light?: Record<string, string>;
+    dark?: Record<string, string>;
+  };
+  css?: Record<string, any>;
+  docs?: string;
+  categories?: string[];
+  meta?: Record<string, any>;
+}
+
+/**
+ * Registry type definition based on the shadcn registry schema
+ */
+export interface Registry {
+  $schema?: string;
+  name: string;
+  description?: string;
+  homepage?: string;
+  items?: RegistryItem[];
+  [key: string]: any;
+}
+
+/**
  * Processes and normalizes registry data
  */
-export function processRegistryData(data: any) {
+export function processRegistryData(data: any): Registry {
+  // If this is a registry item (not a full registry)
+  if (data.type && data.type.startsWith('registry:')) {
+    return {
+      name: data.name || 'Unknown',
+      description: data.description || '',
+      homepage: '',
+      items: [data], // Treat the single item as the only item in this registry
+    };
+  }
+  
+  // Regular registry with multiple items
   return {
     name: data.name || 'Unknown',
     description: data.description || '',
     homepage: data.homepage || '',
     items: data.items || [],
-    // Add more properties as needed
+    ...data, // Include all other properties
   };
 }

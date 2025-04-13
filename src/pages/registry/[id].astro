@@ -2,7 +2,7 @@
 import MainLayout from '@/layouts/MainLayout.astro';
 import ComponentCard from '@/components/registry/ComponentCard';
 import { getCollection } from 'astro:content';
-import { fetchRegistryData, processRegistryData } from '@/lib/registry';
+import { fetchRegistryData, processRegistryData, type RegistryItem } from '@/lib/registry';
 
 // Generate static paths for all registries
 export async function getStaticPaths() {
@@ -52,16 +52,101 @@ const { registryUrl, registry } = Astro.props;
       </div>
     </div>
     
+    {/* Registry Schema Information */}
+    <div class="mb-10">
+      <h2 class="text-2xl font-bold mb-6">Registry Details</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {registry.type && (
+          <div>
+            <h3 class="text-lg font-semibold mb-2">Type</h3>
+            <p class="text-muted-foreground">{registry.type}</p>
+          </div>
+        )}
+        
+        {registry.author && (
+          <div>
+            <h3 class="text-lg font-semibold mb-2">Author</h3>
+            <p class="text-muted-foreground">{registry.author}</p>
+          </div>
+        )}
+        
+        {registry.dependencies && registry.dependencies.length > 0 && (
+          <div class="col-span-1 md:col-span-2">
+            <h3 class="text-lg font-semibold mb-2">Dependencies</h3>
+            <div class="flex flex-wrap gap-2">
+              {registry.dependencies.map((dep: string) => (
+                <span class="bg-muted px-2 py-1 rounded-md text-sm">{dep}</span>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {registry.registryDependencies && registry.registryDependencies.length > 0 && (
+          <div class="col-span-1 md:col-span-2">
+            <h3 class="text-lg font-semibold mb-2">Registry Dependencies</h3>
+            <div class="flex flex-wrap gap-2">
+              {registry.registryDependencies.map((dep: string) => (
+                <span class="bg-muted px-2 py-1 rounded-md text-sm">{dep}</span>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {registry.categories && registry.categories.length > 0 && (
+          <div class="col-span-1 md:col-span-2">
+            <h3 class="text-lg font-semibold mb-2">Categories</h3>
+            <div class="flex flex-wrap gap-2">
+              {registry.categories.map((category: string) => (
+                <span class="bg-primary/10 text-primary px-2 py-1 rounded-md text-sm">{category}</span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+    
+    {/* Files Section */}
+    {registry.files && registry.files.length > 0 && (
+      <div class="mb-10">
+        <h2 class="text-2xl font-bold mb-6">Files</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="border-b">
+                <th class="text-left py-3 px-4">Path</th>
+                <th class="text-left py-3 px-4">Type</th>
+                <th class="text-left py-3 px-4">Target</th>
+              </tr>
+            </thead>
+            <tbody>
+              {registry.files.map((file: { path: string; type: string; target?: string }) => (
+                <tr class="border-b">
+                  <td class="py-3 px-4 font-mono text-sm">{file.path}</td>
+                  <td class="py-3 px-4">{file.type}</td>
+                  <td class="py-3 px-4 font-mono text-sm">{file.target || '-'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    )}
+    
+    {/* Components/Items Section */}
     <div>
-      <h2 class="text-2xl font-bold mb-6">Components ({registry.items.length})</h2>
-      {registry.items.length > 0 ? (
+      <h2 class="text-2xl font-bold mb-6">Components ({registry.items?.length || 0})</h2>
+      {registry.items && registry.items.length > 0 ? (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {registry.items.map((item: { name: string; title?: string; description?: string }) => (
+          {registry.items.map((item: RegistryItem) => (
             <ComponentCard
               client:load
               name={item.name}
               title={item.title || item.name}
               description={item.description || "No description available"}
+              type={item.type}
+              author={item.author}
+              dependencies={item.dependencies}
+              categories={item.categories}
             />
           ))}
         </div>

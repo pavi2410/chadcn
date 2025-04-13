@@ -1,6 +1,7 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
 import RegistryCard from '@/components/registry/RegistryCard';
+import FilterBar from '@/components/registry/FilterBar';
 import { getCollection } from 'astro:content';
 import { fetchRegistryData, processRegistryData } from '@/lib/registry';
 
@@ -13,12 +14,22 @@ const registriesData = await Promise.all(
     const rawData = await fetchRegistryData(entry.data.url);
     if (!rawData) return null;
     
+    const processedData = processRegistryData(rawData);
+    
     return {
       id: entry.id,
       url: entry.data.url,
       featured: entry.data.featured,
       addedAt: entry.data.addedAt,
-      ...processRegistryData(rawData)
+      name: processedData.name || 'Unknown',
+      description: processedData.description || '',
+      homepage: processedData.homepage,
+      items: processedData.items,
+      // Extract additional properties from the registry data
+      type: rawData.type,
+      author: rawData.author,
+      dependencies: rawData.dependencies,
+      categories: rawData.categories
     };
   })
 );
@@ -26,6 +37,19 @@ const registriesData = await Promise.all(
 // Filter out any failed fetches
 const validRegistries = registriesData
   .filter((registry): registry is NonNullable<typeof registry> => registry !== null);
+
+// Extract unique categories and authors for filters
+const allCategories = Array.from(new Set(
+  validRegistries
+    .flatMap(registry => registry.categories || [])
+    .filter(Boolean)
+));
+
+const allAuthors = Array.from(new Set(
+  validRegistries
+    .map(registry => registry.author)
+    .filter(Boolean)
+));
 ---
 
 <MainLayout title="All Registries | shadcn Registry Directory">
@@ -35,14 +59,81 @@ const validRegistries = registriesData
       <p class="text-lg text-muted-foreground">Browse and discover shadcn UI component registries from the community.</p>
     </div>
     
+    <FilterBar 
+      client:load 
+      categories={allCategories} 
+      authors={allAuthors} 
+      onFilterChange={`
+        (filters) => {
+          const registryCards = document.querySelectorAll('[data-registry-card]');
+          let visibleCount = 0;
+          
+          registryCards.forEach(card => {
+            const cardEl = card as HTMLElement;
+            const name = cardEl.dataset.name?.toLowerCase() || '';
+            const description = cardEl.dataset.description?.toLowerCase() || '';
+            const author = cardEl.dataset.author?.toLowerCase() || '';
+            const categories = cardEl.dataset.categories?.split(',') || [];
+            
+            // Search filter
+            const matchesSearch = filters.search === '' || 
+              name.includes(filters.search.toLowerCase()) || 
+              description.includes(filters.search.toLowerCase());
+            
+            // Category filter
+            const matchesCategory = filters.categories.length === 0 || 
+              filters.categories.some(c => categories.includes(c));
+            
+            // Author filter
+            const matchesAuthor = filters.authors.length === 0 || 
+              filters.authors.includes(author);
+            
+            // Show/hide based on all filters
+            const shouldShow = matchesSearch && matchesCategory && matchesAuthor;
+            cardEl.style.display = shouldShow ? 'block' : 'none';
+            
+            if (shouldShow) visibleCount++;
+          });
+          
+          // Show/hide no results message
+          const noResultsEl = document.getElementById('no-results');
+          const resultsGridEl = document.getElementById('results-grid');
+          
+          if (noResultsEl && resultsGridEl) {
+            noResultsEl.style.display = visibleCount === 0 ? 'block' : 'none';
+            resultsGridEl.style.display = visibleCount > 0 ? 'grid' : 'none';
+          }
+        }
+      `}
+    />
+    
     {validRegistries.length > 0 ? (
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div id="results-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {validRegistries.map(registry => (
-          <RegistryCard 
-            client:load
-            registry={registry} 
-            href={`/registry/${registry.id}`}
-          />
+          <div 
+            data-registry-card 
+            data-name={registry.name} 
+            data-description={registry.description} 
+            data-author={registry.author} 
+            data-categories={registry.categories?.join(',')}
+          >
+            <RegistryCard 
+              client:load
+              registry={{
+                id: registry.id,
+                name: registry.name,
+                description: registry.description || '',
+                items: registry.items || [],
+                homepage: registry.homepage,
+                featured: registry.featured,
+                type: registry.type,
+                author: registry.author,
+                dependencies: registry.dependencies,
+                categories: registry.categories
+              }} 
+              href={`/registry/${registry.id}`}
+            />
+          </div>
         ))}
       </div>
     ) : (
@@ -50,5 +141,9 @@ const validRegistries = registriesData
         <p class="text-muted-foreground">No valid registries found. Please check the registry URLs and try again.</p>
       </div>
     )}
+    
+    <div id="no-results" class="text-center py-12" style="display: none;">
+      <p class="text-muted-foreground">No registries match your filters. Try adjusting your search criteria.</p>
+    </div>
   </div>
 </MainLayout>
