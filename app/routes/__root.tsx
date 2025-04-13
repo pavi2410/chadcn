@@ -25,6 +25,10 @@ export const Route = createRootRoute({
     ],
     links: [
       {
+        rel: "icon",
+        href: "/chadcn.png"
+      },
+      {
         rel: "stylesheet",
         href: appCss,
       },
