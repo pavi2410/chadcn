@@ -1,9 +1,0 @@
-name = "chadcn"
-main = "src/index.ts"
-compatibility_date = "2025-04-13"
-
-[[ d1_databases ]]
-binding = "DB"
-database_name = "chadcn"
-database_id = "9288776f-3bb9-4ac4-82cf-76c4d9951d66"
-migrations_dir = "drizzle"
