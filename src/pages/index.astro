@@ -1,25 +1,24 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
 import RegistryCard from '@/components/registry/RegistryCard';
-import { getCollection } from 'astro:content';
-import { fetchRegistryData, processRegistryData } from '@/lib/registry';
+import { processRegistryData } from '@/lib/registry';
+import { getAllRegistries } from '@/data/registry';
 
 // Get all registry URLs from our collection
-const registryEntries = await getCollection('registries');
+const registryEntries = await getAllRegistries();
 
 // Fetch data for each registry
 const registriesData = await Promise.all(
   registryEntries.map(async (entry) => {
-    const rawData = await fetchRegistryData(entry.data.url);
-    if (!rawData) return null;
+    const rawData = JSON.parse(entry.registryJsonContent);
     
     const processedData = processRegistryData(rawData);
     
     return {
       id: entry.id,
-      url: entry.data.url,
-      featured: entry.data.featured,
-      addedAt: entry.data.addedAt,
+      url: entry.url,
+      featured: false,
+      addedAt: entry.createdAt,
       name: processedData.name || 'Unknown',
       description: processedData.description || '',
       homepage: processedData.homepage,

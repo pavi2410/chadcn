@@ -6,7 +6,7 @@ import { IconExternalLink } from '@tabler/icons-react';
 
 interface RegistryCardProps {
   registry: {
-    id: string;
+    id: number;
     name: string;
     description?: string;
     items?: any[];
