@@ -8,7 +8,8 @@
     "start": "vinxi start",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "drizzle-kit migrate",
+    "cf:preview": "bun run build && wrangler pages dev dist"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -17,7 +18,8 @@
     "@vitejs/plugin-react": "^4.3.4",
     "drizzle-kit": "^0.30.6",
     "tsx": "^4.19.3",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "wrangler": "^4.10.0"
   },
   "peerDependencies": {
     "typescript": "^5.8.3"
