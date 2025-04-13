@@ -1,0 +1,54 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import RegistryCard from '@/components/registry/RegistryCard';
+import { getCollection } from 'astro:content';
+import { fetchRegistryData, processRegistryData } from '@/lib/registry';
+
+// Get all registry URLs from our collection
+const registryEntries = await getCollection('registries');
+
+// Fetch data for each registry
+const registriesData = await Promise.all(
+  registryEntries.map(async (entry) => {
+    const rawData = await fetchRegistryData(entry.data.url);
+    if (!rawData) return null;
+    
+    return {
+      id: entry.id,
+      url: entry.data.url,
+      featured: entry.data.featured,
+      addedAt: entry.data.addedAt,
+      ...processRegistryData(rawData)
+    };
+  })
+);
+
+// Filter out any failed fetches
+const validRegistries = registriesData
+  .filter((registry): registry is NonNullable<typeof registry> => registry !== null);
+---
+
+<MainLayout title="All Registries | shadcn Registry Directory">
+  <div class="container py-12">
+    <div class="max-w-3xl space-y-4 mb-12">
+      <h1 class="text-4xl font-bold">All Registries</h1>
+      <p class="text-lg text-muted-foreground">Browse and discover shadcn UI component registries from the community.</p>
+    </div>
+    
+    {validRegistries.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {validRegistries.map(registry => (
+          <RegistryCard 
+            client:load
+            registry={registry} 
+            href={`/registry/${registry.id}`}
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-12">
+        <p class="text-muted-foreground">No valid registries found. Please check the registry URLs and try again.</p>
+      </div>
+    )}
+  </div>
+</MainLayout>

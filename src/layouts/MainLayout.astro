@@ -1,0 +1,54 @@
+---
+import '@/styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { 
+  title, 
+  description = "Discover and explore shadcn UI component registries created by the community." 
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body class="min-h-screen bg-background">
+    <header class="border-b">
+      <div class="container flex h-16 items-center">
+        <a href="/" class="font-bold text-xl">shadcn Registry</a>
+        <nav class="ml-auto flex gap-4">
+          <a href="/" class="text-foreground/70 hover:text-foreground">Home</a>
+          <a href="/registries" class="text-foreground/70 hover:text-foreground">Registries</a>
+        </nav>
+      </div>
+    </header>
+    
+    <main>
+      <slot />
+    </main>
+    
+    <footer class="border-t py-6 md:py-0">
+      <div class="container flex flex-col items-center justify-between gap-4 md:h-16 md:flex-row">
+        <p class="text-sm text-muted-foreground">
+          &copy; {new Date().getFullYear()} shadcn Registry. All rights reserved.
+        </p>
+        <div class="flex items-center gap-4">
+          <a href="https://github.com/shadcn-ui/ui" target="_blank" rel="noopener noreferrer" class="text-sm text-muted-foreground hover:text-foreground">
+            shadcn/ui
+          </a>
+          <a href="https://ui.shadcn.com/docs/registry" target="_blank" rel="noopener noreferrer" class="text-sm text-muted-foreground hover:text-foreground">
+            Registry Docs
+          </a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

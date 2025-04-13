@@ -12,6 +12,7 @@
     "@astrojs/mdx": "^4.2.3",
     "@astrojs/react": "^4.2.3",
     "@radix-ui/react-slot": "^1.2.0",
+    "@tabler/icons-react": "^3.31.0",
     "@tailwindcss/vite": "^4.0.17",
     "@types/canvas-confetti": "^1.9.0",
     "@types/react": "^19.1.1",

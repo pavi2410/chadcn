@@ -1,0 +1,73 @@
+---
+import MainLayout from '@/layouts/MainLayout.astro';
+import ComponentCard from '@/components/registry/ComponentCard';
+import { getCollection } from 'astro:content';
+import { fetchRegistryData, processRegistryData } from '@/lib/registry';
+
+// Generate static paths for all registries
+export async function getStaticPaths() {
+  const registryEntries = await getCollection('registries');
+  
+  const paths = await Promise.all(
+    registryEntries.map(async (entry) => {
+      const rawData = await fetchRegistryData(entry.data.url);
+      if (!rawData) return null;
+      
+      const processedData = processRegistryData(rawData);
+      
+      return {
+        params: { id: entry.id },
+        props: { 
+          registryUrl: entry.data.url,
+          registry: processedData
+        }
+      };
+    })
+  );
+  
+  return paths.filter((path): path is NonNullable<typeof path> => path !== null);
+}
+
+const { id } = Astro.params;
+const { registryUrl, registry } = Astro.props;
+---
+
+<MainLayout title={`${registry.name} | shadcn Registry Directory`}>
+  <div class="container py-12">
+    <div class="mb-10">
+      <h1 class="text-4xl font-bold mb-4">{registry.name}</h1>
+      <p class="text-lg mb-6">{registry.description}</p>
+      
+      {registry.homepage && (
+        <a href={registry.homepage} target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">
+          Visit Homepage
+        </a>
+      )}
+    </div>
+    
+    <div class="mb-10">
+      <h2 class="text-2xl font-bold mb-6">Installation</h2>
+      <div class="bg-muted p-4 rounded-md overflow-x-auto">
+        <code>bunx --bun shadcn@latest add {registryUrl}</code>
+      </div>
+    </div>
+    
+    <div>
+      <h2 class="text-2xl font-bold mb-6">Components ({registry.items.length})</h2>
+      {registry.items.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {registry.items.map((item: { name: string; title?: string; description?: string }) => (
+            <ComponentCard
+              client:load
+              name={item.name}
+              title={item.title || item.name}
+              description={item.description || "No description available"}
+            />
+          ))}
+        </div>
+      ) : (
+        <p class="text-muted-foreground">No components found in this registry.</p>
+      )}
+    </div>
+  </div>
+</MainLayout>
