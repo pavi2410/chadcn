@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { authClient } from '@/lib/auth-client'
+import { Header } from '@/components/header'
 import React from 'react'
 
 export const Route = createFileRoute('/auth')({
@@ -16,10 +17,12 @@ function Auth() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4">
-            <Avatar className="size-16">
-              <AvatarImage src="/chadcn.png" alt="chadcn logo" />
-              <AvatarFallback className="bg-primary text-primary-foreground font-bold text-xl">C</AvatarFallback>
-            </Avatar>
+            <a href="/">
+              <Avatar className="size-16">
+                <AvatarImage src="/chadcn.png" alt="chadcn logo" />
+                <AvatarFallback className="bg-primary text-primary-foreground font-bold text-xl">C</AvatarFallback>
+              </Avatar>
+            </a>
           </div>
           <CardTitle className="text-2xl">Sign in to chadcn</CardTitle>
           <CardDescription>

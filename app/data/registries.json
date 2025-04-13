@@ -1,0 +1,50 @@
+[
+  {
+    "id": "supabase-nextjs-client",
+    "url": "https://supabase.com/ui/r/supabase-client-nextjs.json",
+    "featured": true,
+    "addedAt": "2025-04-13T00:00:00Z"
+  },
+  {
+    "id": "supabase-react-router-client",
+    "url": "https://supabase.com/ui/r/supabase-client-react-router.json",
+    "featured": true,
+    "addedAt": "2025-04-13T00:00:00Z"
+  },
+  {
+    "id": "supabase-password-auth-nextjs",
+    "url": "https://supabase.com/ui/r/password-based-auth-nextjs.json",
+    "featured": true,
+    "addedAt": "2025-04-13T00:00:00Z"
+  },
+  {
+    "id": "supabase-dropzone-nextjs",
+    "url": "https://supabase.com/ui/r/dropzone-nextjs.json",
+    "featured": true,
+    "addedAt": "2025-04-13T00:00:00Z"
+  },
+  {
+    "id": "supabase-realtime-cursor",
+    "url": "https://supabase.com/ui/r/realtime-cursor-nextjs.json",
+    "featured": false,
+    "addedAt": "2025-04-13T00:00:00Z"
+  },
+  {
+    "id": "supabase-user-avatar",
+    "url": "https://supabase.com/ui/r/current-user-avatar-nextjs.json",
+    "featured": false,
+    "addedAt": "2025-04-13T00:00:00Z"
+  },
+  {
+    "id": "supabase-avatar-stack",
+    "url": "https://supabase.com/ui/r/realtime-avatar-stack-nextjs.json",
+    "featured": false,
+    "addedAt": "2025-04-13T00:00:00Z"
+  },
+  {
+    "id": "supabase-realtime-chat",
+    "url": "https://supabase.com/ui/r/realtime-chat-nextjs.json",
+    "featured": false,
+    "addedAt": "2025-04-13T00:00:00Z"
+  }
+]

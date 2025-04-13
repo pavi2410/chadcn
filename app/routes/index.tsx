@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Input } from '@/components/ui/input'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Header } from '@/components/header'
 import React from 'react'
 
 export const Route = createFileRoute('/')({
@@ -16,71 +16,24 @@ function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="border-b border-border sticky top-0 z-10 bg-background/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Avatar className="size-10">
-              <AvatarImage src="/chadcn.png" alt="chadcn logo" />
-              <AvatarFallback className="bg-primary text-primary-foreground font-bold text-xl">C</AvatarFallback>
-            </Avatar>
-            <span className="font-semibold text-xl">chadcn</span>
-          </div>
-          
-          <nav className="hidden md:flex items-center gap-6">
-            <a href="#features" className="text-foreground/80 hover:text-foreground transition-colors">Features</a>
-            <a href="#components" className="text-foreground/80 hover:text-foreground transition-colors">Components</a>
-            <a href="#testimonials" className="text-foreground/80 hover:text-foreground transition-colors">Testimonials</a>
-            <a href="#pricing" className="text-foreground/80 hover:text-foreground transition-colors">Pricing</a>
-          </nav>
-          
-          <div className="flex items-center gap-4">
-            <Button variant="outline" className="hidden md:inline-flex" asChild>
-              <a href="/auth">Log in</a>
-            </Button>
-            <Button asChild>
-              <a href="/auth">Get Started</a>
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild className="md:hidden">
-                <Button variant="outline" size="icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="size-5">
-                    <line x1="4" x2="20" y1="12" y2="12"/>
-                    <line x1="4" x2="20" y1="6" y2="6"/>
-                    <line x1="4" x2="20" y1="18" y2="18"/>
-                  </svg>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem asChild>
-                  <a href="#features">Features</a>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <a href="#components">Components</a>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <a href="#testimonials">Testimonials</a>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <a href="#pricing">Pricing</a>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <a href="/auth">Log in</a>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-      </header>
+      <Header showNavLinks showAuthButtons />
       
       {/* Hero Section */}
       <section className="py-20 md:py-32">
         <div className="container mx-auto px-4 text-center">
           <Badge className="mb-4">New Release</Badge>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 max-w-4xl mx-auto">Beautiful UI components built with Tailwind CSS v4</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 max-w-4xl mx-auto text-balance">shadcn registry for absolute chads</h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">Accessible and customizable components that you can copy and paste into your apps.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg">Get Started</Button>
-            <Button size="lg" variant="outline">View on GitHub</Button>
+            <Button size="lg" asChild>
+              <a href="/auth">Get Started</a>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <a href="/registry">Registry →</a>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <a href="https://github.com/shadcn-ui/ui" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+            </Button>
           </div>
         </div>
       </section>

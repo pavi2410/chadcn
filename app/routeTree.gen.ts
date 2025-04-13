@@ -11,10 +11,18 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as RegistryImport } from './routes/registry'
 import { Route as AuthImport } from './routes/auth'
 import { Route as IndexImport } from './routes/index'
+import { Route as RegistryIdImport } from './routes/registry.$id'
 
 // Create/Update Routes
+
+const RegistryRoute = RegistryImport.update({
+  id: '/registry',
+  path: '/registry',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AuthRoute = AuthImport.update({
   id: '/auth',
@@ -26,6 +34,12 @@ const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const RegistryIdRoute = RegistryIdImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => RegistryRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -46,44 +60,78 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
+    '/registry': {
+      id: '/registry'
+      path: '/registry'
+      fullPath: '/registry'
+      preLoaderRoute: typeof RegistryImport
+      parentRoute: typeof rootRoute
+    }
+    '/registry/$id': {
+      id: '/registry/$id'
+      path: '/$id'
+      fullPath: '/registry/$id'
+      preLoaderRoute: typeof RegistryIdImport
+      parentRoute: typeof RegistryImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface RegistryRouteChildren {
+  RegistryIdRoute: typeof RegistryIdRoute
+}
+
+const RegistryRouteChildren: RegistryRouteChildren = {
+  RegistryIdRoute: RegistryIdRoute,
+}
+
+const RegistryRouteWithChildren = RegistryRoute._addFileChildren(
+  RegistryRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/registry': typeof RegistryRouteWithChildren
+  '/registry/$id': typeof RegistryIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/registry': typeof RegistryRouteWithChildren
+  '/registry/$id': typeof RegistryIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/registry': typeof RegistryRouteWithChildren
+  '/registry/$id': typeof RegistryIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth'
+  fullPaths: '/' | '/auth' | '/registry' | '/registry/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth'
-  id: '__root__' | '/' | '/auth'
+  to: '/' | '/auth' | '/registry' | '/registry/$id'
+  id: '__root__' | '/' | '/auth' | '/registry' | '/registry/$id'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
+  RegistryRoute: typeof RegistryRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
+  RegistryRoute: RegistryRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -97,7 +145,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/auth"
+        "/auth",
+        "/registry"
       ]
     },
     "/": {
@@ -105,6 +154,16 @@ export const routeTree = rootRoute
     },
     "/auth": {
       "filePath": "auth.tsx"
+    },
+    "/registry": {
+      "filePath": "registry.tsx",
+      "children": [
+        "/registry/$id"
+      ]
+    },
+    "/registry/$id": {
+      "filePath": "registry.$id.tsx",
+      "parent": "/registry"
     }
   }
 }
